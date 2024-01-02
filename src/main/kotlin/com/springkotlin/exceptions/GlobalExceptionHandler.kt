@@ -5,6 +5,7 @@ import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
 import org.springframework.http.HttpStatusCode
 import org.springframework.http.ResponseEntity
+import org.springframework.security.authentication.BadCredentialsException
 import org.springframework.validation.FieldError
 import org.springframework.validation.ObjectError
 import org.springframework.web.bind.MethodArgumentNotValidException
@@ -55,14 +56,13 @@ class GlobalExceptionHandler : ResponseEntityExceptionHandler() {
     }
 
     // When wrong username or password login
-
-    //    @ExceptionHandler(BadCredentialsException::class)
-//    fun handleBadCredentialsException(ex: BadCredentialsException, request: WebRequest): ResponseEntity<ErrorResponse> {
-//        val errorResponse = ErrorResponse(
-//            message = "Incorrect username or password",
-//        )
-//        return ResponseEntity(errorResponse, HttpStatus.BAD_REQUEST)
-//    }
+    @ExceptionHandler(BadCredentialsException::class)
+    fun handleBadCredentialsException(ex: BadCredentialsException, request: WebRequest): ResponseEntity<ErrorResponse> {
+        val errorResponse = ErrorResponse(
+            message = "Incorrect username or password",
+        )
+        return ResponseEntity(errorResponse, HttpStatus.BAD_REQUEST)
+    }
 
     private fun getAllErrors(errors: List<ObjectError>): List<Map<String, String>> {
         val allErrors = errors.mapNotNull { error ->
